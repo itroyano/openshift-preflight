@@ -3,10 +3,10 @@ package engine
 import (
 	"fmt"
 
-	"github.com/komish/preflight/certification"
-	"github.com/komish/preflight/certification/errors"
-	"github.com/komish/preflight/certification/internal/shell"
-	"github.com/komish/preflight/certification/runtime"
+	"github.com/redhat-openshift-ecosystem/openshift-preflight/certification"
+	"github.com/redhat-openshift-ecosystem/openshift-preflight/certification/errors"
+	"github.com/redhat-openshift-ecosystem/openshift-preflight/certification/internal/shell"
+	"github.com/redhat-openshift-ecosystem/openshift-preflight/certification/runtime"
 	"github.com/sirupsen/logrus"
 )
 
@@ -90,6 +90,21 @@ var nameToChecksMap = map[string]certification.Check{
 	catalogInitializationCheck.Name():     catalogInitializationCheck,
 }
 
+var containerPolicyChecks = map[string]certification.Check{
+	runAsNonRootCheck.Name():              runAsNonRootCheck,
+	underLayerMaxCheck.Name():             underLayerMaxCheck,
+	hasRequiredLabelCheck.Name():          hasRequiredLabelCheck,
+	basedOnUbiCheck.Name():                basedOnUbiCheck,
+	hasLicenseCheck.Name():                hasLicenseCheck,
+	hasMinimalVulnerabilitiesCheck.Name(): hasMinimalVulnerabilitiesCheck,
+	hasUniqueTagCheck.Name():              hasUniqueTagCheck,
+	hasNoProhibitedCheck.Name():           hasNoProhibitedCheck,
+}
+
+var operatorPolicyChecks = map[string]certification.Check{
+	validateOperatorBundle.Name(): validateOperatorBundle,
+}
+
 func AllChecks() []string {
 	all := make([]string, len(nameToChecksMap))
 	i := 0
@@ -99,4 +114,26 @@ func AllChecks() []string {
 		i++
 	}
 	return all
+}
+
+func OperatorPolicy() []string {
+	checks := make([]string, len(operatorPolicyChecks))
+	i := 0
+
+	for k := range operatorPolicyChecks {
+		checks[i] = k
+		i++
+	}
+	return checks
+}
+
+func ContainerPolicy() []string {
+	checks := make([]string, len(containerPolicyChecks))
+	i := 0
+
+	for k := range containerPolicyChecks {
+		checks[i] = k
+		i++
+	}
+	return checks
 }
