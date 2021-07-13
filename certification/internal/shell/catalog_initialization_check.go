@@ -1,14 +1,19 @@
 package shell
 
 import (
-	"github.com/komish/preflight/certification"
+	"github.com/redhat-openshift-ecosystem/openshift-preflight/certification"
+	"github.com/redhat-openshift-ecosystem/openshift-preflight/cli"
 	"github.com/sirupsen/logrus"
 )
 
 type CatalogInitializationCheck struct{}
 
 func (p *CatalogInitializationCheck) Validate(image string, logger *logrus.Logger) (bool, error) {
-	// TODO
+	podmanEngine := PodmanCLIEngine{}
+	return p.validate(podmanEngine, image, logger)
+}
+
+func (p *CatalogInitializationCheck) validate(podmanEngine cli.PodmanEngine, image string, logger *logrus.Logger) (bool, error) {
 
 	return false, nil
 }
